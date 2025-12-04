@@ -170,15 +170,48 @@ This includes:
 - **High** (20% chance): Orange lightning, higher frequency sound
 - **Extreme** (10% chance): Red lightning, highest frequency sound
 
+## Logging
+
+The application includes comprehensive logging for both backend and frontend:
+
+### Backend Logging
+- All server logs are written to `logs/backend-YYYY-MM-DD.log`
+- Logs include: HTTP requests, API calls, errors, and system events
+- All timestamps are in West Coast timezone (PST/PDT)
+
+### Frontend Logging
+- All frontend console logs (console.log, console.error, console.warn, etc.) are automatically synced to the backend
+- Frontend logs are written to `logs/frontend-YYYY-MM-DD.log`
+- Logs include stack traces for errors
+- All timestamps are in West Coast timezone (PST/PDT)
+
+### Log Files
+- Logs are stored in the `logs/` directory
+- Daily log rotation (new file per day)
+- Logs persist via Docker volume mount
+- Log format: `[YYYY-MM-DD HH:mm:ss.SSS PST/PDT] [LEVEL] [SOURCE] message | Data: {...}`
+
+### Viewing Logs
+```bash
+# View backend logs
+tail -f logs/backend-$(date +%Y-%m-%d).log
+
+# View frontend logs
+tail -f logs/frontend-$(date +%Y-%m-%d).log
+
+# View all logs
+tail -f logs/*.log
+```
+
 ## Production Considerations
 
 - The current implementation uses in-memory storage for scores. For production, consider:
   - Adding a database (PostgreSQL, MongoDB, Redis)
   - Implementing persistent storage
   - Adding rate limiting
-  - Setting up monitoring and logging
   - Using environment variables for configuration
   - Adding SSL/TLS termination (via reverse proxy like nginx)
+  - Log rotation and archival (currently logs are kept daily)
 
 ## Health Checks
 

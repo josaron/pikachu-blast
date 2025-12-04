@@ -33,6 +33,16 @@ let scores = {
   extreme: 0
 };
 
+// Favicon handler - suppress 404 errors
+app.get('/favicon.ico', (req, res) => {
+  res.status(204).end(); // No Content - browser will use default
+});
+
+// Chrome DevTools handler - suppress 404 errors
+app.get('/.well-known/appspecific/com.chrome.devtools.json', (req, res) => {
+  res.status(204).end(); // No Content
+});
+
 // Frontend log endpoint
 app.post('/api/log', (req, res) => {
   try {
@@ -101,7 +111,11 @@ app.use((err, req, res, next) => {
 
 // 404 handler
 app.use((req, res) => {
-  logger.warn('HTTP', '404 Not Found', { path: req.path, method: req.method });
+  // Don't log warnings for common browser requests
+  const ignoredPaths = ['/favicon.ico', '/.well-known/appspecific/com.chrome.devtools.json'];
+  if (!ignoredPaths.includes(req.path)) {
+    logger.warn('HTTP', '404 Not Found', { path: req.path, method: req.method });
+  }
   res.status(404).json({ error: 'Not found' });
 });
 

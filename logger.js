@@ -28,8 +28,42 @@ class Logger {
 
   getWestCoastTimestamp() {
     const now = new Date();
-    const westCoastTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
-    return westCoastTime.toISOString().replace('T', ' ').substring(0, 23) + ' PST/PDT';
+    
+    // Use Intl.DateTimeFormat to get West Coast time components
+    const dateFormatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Los_Angeles',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    });
+    
+    const timeFormatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Los_Angeles',
+      timeZoneName: 'short'
+    });
+    
+    const dateParts = dateFormatter.formatToParts(now);
+    const getPart = (type) => dateParts.find(p => p.type === type)?.value || '00';
+    
+    const year = getPart('year');
+    const month = getPart('month');
+    const day = getPart('day');
+    const hour = getPart('hour');
+    const minute = getPart('minute');
+    const second = getPart('second');
+    
+    // Get milliseconds from original date (milliseconds don't change with timezone)
+    const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
+    
+    // Get timezone abbreviation (PST/PDT)
+    const tzString = timeFormatter.format(now);
+    const timezone = tzString.includes('PDT') ? 'PDT' : (tzString.includes('PST') ? 'PST' : 'PST');
+    
+    return `${year}-${month}-${day} ${hour}:${minute}:${second}.${milliseconds} ${timezone}`;
   }
 
   writeToFile(filePath, message) {

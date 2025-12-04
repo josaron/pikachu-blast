@@ -170,63 +170,172 @@ function playSound(intensity) {
     oscillator.stop(audioContext.currentTime + 0.3);
 }
 
-// Draw lightning effect
+// Draw static electricity graphic
 function drawLightning(canvas, intensity) {
     const ctx = canvas.getContext('2d');
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
     const pikachuY = centerY - 50; // Approximate Pikachu position
     
+    // Calculate screen dimensions for scaling
+    const screenSize = Math.min(canvas.width, canvas.height);
+    const graphicRadius = screenSize * 0.25; // Cover roughly half the screen
+    
     const color = LIGHTNING_COLORS[intensity];
-    const branches = intensity === 'low' ? 3 : intensity === 'medium' ? 5 : intensity === 'high' ? 7 : 10;
-    const duration = intensity === 'low' ? 300 : intensity === 'medium' ? 400 : intensity === 'high' ? 500 : 700;
+    // Duration based on intensity: Low=300ms, Medium=500ms, High=750ms, Extreme=1000ms
+    const duration = intensity === 'low' ? 300 : intensity === 'medium' ? 500 : intensity === 'high' ? 750 : 1000;
     
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Intensity display text
+    const intensityText = intensity.toUpperCase();
+    const intensityEmojis = {
+        low: '⚡',
+        medium: '⚡⚡',
+        high: '⚡⚡⚡',
+        extreme: '⚡⚡⚡⚡'
+    };
+    const displayText = `${intensityEmojis[intensity]} ${intensityText}`;
     
-    function drawBolt(x1, y1, x2, y2, depth) {
-        if (depth > 8) return;
-        
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        
-        const midX = (x1 + x2) / 2;
-        const midY = (y1 + y2) / 2;
-        const offsetX = (Math.random() - 0.5) * 30;
-        const offsetY = (Math.random() - 0.5) * 30;
-        
-        ctx.lineTo(midX + offsetX, midY + offsetY);
-        ctx.lineTo(x2, y2);
-        
+    // Function to draw static electricity sparks
+    function drawStaticElectricity(scale, alpha) {
+        ctx.save();
         ctx.strokeStyle = color;
-        ctx.lineWidth = depth === 0 ? 4 : 2;
-        ctx.shadowBlur = 15;
+        ctx.fillStyle = color;
+        ctx.globalAlpha = alpha;
+        ctx.shadowBlur = 20 * scale;
         ctx.shadowColor = color;
+        ctx.lineCap = 'round';
+        
+        const centerXPos = centerX;
+        const centerYPos = pikachuY;
+        const radius = graphicRadius * scale;
+        
+        // Center sparks (vertical, horizontal, diagonal)
+        ctx.lineWidth = 4 * scale;
+        ctx.beginPath();
+        ctx.moveTo(centerXPos, centerYPos);
+        ctx.lineTo(centerXPos, centerYPos - radius * 0.5);
+        ctx.moveTo(centerXPos, centerYPos);
+        ctx.lineTo(centerXPos, centerYPos + radius * 0.5);
+        ctx.moveTo(centerXPos, centerYPos);
+        ctx.lineTo(centerXPos - radius * 0.5, centerYPos);
+        ctx.moveTo(centerXPos, centerYPos);
+        ctx.lineTo(centerXPos + radius * 0.5, centerYPos);
         ctx.stroke();
         
-        if (depth < branches) {
-            const angle = Math.atan2(y2 - y1, x2 - x1);
-            const branchAngle = (Math.random() - 0.5) * Math.PI / 3;
-            const branchLength = Math.random() * 50 + 30;
-            const branchX = midX + Math.cos(angle + branchAngle) * branchLength;
-            const branchY = midY + Math.sin(angle + branchAngle) * branchLength;
+        // Diagonal center sparks
+        ctx.lineWidth = 3 * scale;
+        ctx.beginPath();
+        const diagDist = radius * 0.35;
+        ctx.moveTo(centerXPos, centerYPos);
+        ctx.lineTo(centerXPos - diagDist, centerYPos - diagDist);
+        ctx.moveTo(centerXPos, centerYPos);
+        ctx.lineTo(centerXPos + diagDist, centerYPos - diagDist);
+        ctx.moveTo(centerXPos, centerYPos);
+        ctx.lineTo(centerXPos - diagDist, centerYPos + diagDist);
+        ctx.moveTo(centerXPos, centerYPos);
+        ctx.lineTo(centerXPos + diagDist, centerYPos + diagDist);
+        ctx.stroke();
+        
+        // Outer ring sparks (8 directions)
+        ctx.lineWidth = 3 * scale;
+        const angles = [0, Math.PI / 4, Math.PI / 2, 3 * Math.PI / 4, Math.PI, 5 * Math.PI / 4, 3 * Math.PI / 2, 7 * Math.PI / 4];
+        angles.forEach((angle, i) => {
+            const x = centerXPos + Math.cos(angle) * radius;
+            const y = centerYPos + Math.sin(angle) * radius;
             
-            drawBolt(midX + offsetX, midY + offsetY, branchX, branchY, depth + 1);
+            ctx.beginPath();
+            // Main spark
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + Math.cos(angle) * radius * 0.2, y + Math.sin(angle) * radius * 0.2);
+            // Side sparks
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + Math.cos(angle + Math.PI / 2) * radius * 0.15, y + Math.sin(angle + Math.PI / 2) * radius * 0.15);
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + Math.cos(angle - Math.PI / 2) * radius * 0.15, y + Math.sin(angle - Math.PI / 2) * radius * 0.15);
+            ctx.stroke();
+        });
+        
+        // Scattered spark points
+        ctx.lineWidth = 1;
+        const sparkPoints = [
+            [centerXPos - radius * 0.4, centerYPos - radius * 0.3],
+            [centerXPos + radius * 0.4, centerYPos - radius * 0.3],
+            [centerXPos + radius * 0.6, centerYPos],
+            [centerXPos + radius * 0.4, centerYPos + radius * 0.3],
+            [centerXPos - radius * 0.4, centerYPos + radius * 0.3],
+            [centerXPos - radius * 0.6, centerYPos],
+        ];
+        sparkPoints.forEach(([x, y]) => {
+            ctx.beginPath();
+            ctx.arc(x, y, 3 * scale, 0, Math.PI * 2);
+            ctx.fill();
+        });
+        
+        ctx.restore();
+    }
+    
+    // Animate intensity text with pulsing effect
+    const textY = centerY + 100;
+    const fontSize = Math.max(48, screenSize * 0.08); // Responsive font size
+    let startTime = Date.now();
+    let animationFrameId;
+    
+    function animate() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw colored overlay
+        ctx.fillStyle = color;
+        ctx.globalAlpha = 0.15 * (1 - progress * 0.5);
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.globalAlpha = 1.0;
+        
+        // Draw static electricity with pulsing effect
+        const pulse = 1 + Math.sin(progress * Math.PI * 4) * 0.1;
+        const graphicAlpha = progress < 0.1 ? progress * 10 : (progress > 0.9 ? (1 - progress) * 10 : 1);
+        drawStaticElectricity(pulse, graphicAlpha);
+        
+        // Draw intensity text with pulsing effect
+        const currentFontSize = fontSize * pulse;
+        const textAlpha = progress < 0.1 ? progress * 10 : (progress > 0.9 ? (1 - progress) * 10 : 1);
+        
+        ctx.save();
+        ctx.font = `bold ${currentFontSize}px Arial, sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        // Text shadow/glow effect
+        ctx.shadowBlur = 30;
+        ctx.shadowColor = color;
+        ctx.fillStyle = color;
+        ctx.globalAlpha = textAlpha;
+        
+        // Draw text with outline for visibility
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+        ctx.lineWidth = 4;
+        ctx.strokeText(displayText, centerX, textY);
+        ctx.fillText(displayText, centerX, textY);
+        
+        ctx.restore();
+        
+        if (progress < 1) {
+            animationFrameId = requestAnimationFrame(animate);
+        } else {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
-        
-        drawBolt(midX + offsetX, midY + offsetY, x2, y2, depth + 1);
     }
     
-    // Draw multiple lightning bolts
-    for (let i = 0; i < branches; i++) {
-        const angle = (Math.PI * 2 * i) / branches;
-        const length = 200 + Math.random() * 100;
-        const endX = centerX + Math.cos(angle) * length;
-        const endY = pikachuY + Math.sin(angle) * length;
-        
-        drawBolt(centerX, pikachuY, endX, endY, 0);
-    }
+    // Start animation
+    animate();
     
+    // Cleanup after duration
     setTimeout(() => {
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+        }
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }, duration);
 }
