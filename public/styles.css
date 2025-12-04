@@ -24,6 +24,66 @@ body {
     align-items: center;
 }
 
+.header {
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 1;
+}
+
+.title {
+    font-family: 'Arial Black', 'Arial Bold', Arial, sans-serif;
+    font-size: 4rem;
+    font-weight: 900;
+    color: #FFD700;
+    text-shadow: 
+        3px 3px 0px #000,
+        -1px -1px 0px #000,
+        1px -1px 0px #000,
+        -1px 1px 0px #000,
+        0 0 20px rgba(255, 215, 0, 0.8);
+    margin: 0;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    animation: titleGlow 2s ease-in-out infinite alternate;
+}
+
+.subtitle {
+    font-family: 'Arial', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 
+        2px 2px 0px #000,
+        -1px -1px 0px #000,
+        1px -1px 0px #000,
+        -1px 1px 0px #000;
+    margin: 15px 0 0 0;
+    letter-spacing: 1px;
+}
+
+@keyframes titleGlow {
+    0% {
+        text-shadow: 
+            3px 3px 0px #000,
+            -1px -1px 0px #000,
+            1px -1px 0px #000,
+            -1px 1px 0px #000,
+            0 0 20px rgba(255, 215, 0, 0.8);
+    }
+    100% {
+        text-shadow: 
+            3px 3px 0px #000,
+            -1px -1px 0px #000,
+            1px -1px 0px #000,
+            -1px 1px 0px #000,
+            0 0 30px rgba(255, 215, 0, 1),
+            0 0 40px rgba(255, 215, 0, 0.6);
+    }
+}
+
 .pikachu-container {
     position: relative;
     cursor: pointer;
