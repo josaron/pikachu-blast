@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pika-Blast</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="pikachu-container" id="pikachuContainer">
+            <img src="pikachu.png" alt="Pikachu" id="pikachu" class="pikachu">
+            <canvas id="lightningCanvas" class="lightning-canvas"></canvas>
+        </div>
+        <div class="score-display" id="scoreDisplay">
+            <h2>Blast Scores</h2>
+            <div class="scores">
+                <div class="score-item">
+                    <span class="intensity low">⚡ Low:</span>
+                    <span id="lowScore">0</span>
+                </div>
+                <div class="score-item">
+                    <span class="intensity medium">⚡⚡ Medium:</span>
+                    <span id="mediumScore">0</span>
+                </div>
+                <div class="score-item">
+                    <span class="intensity high">⚡⚡⚡ High:</span>
+                    <span id="highScore">0</span>
+                </div>
+                <div class="score-item">
+                    <span class="intensity extreme">⚡⚡⚡⚡ Extreme:</span>
+                    <span id="extremeScore">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
+

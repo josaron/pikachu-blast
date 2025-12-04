@@ -1,0 +1,30 @@
+name: Build and Test Docker Image
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      
+      - name: Build Docker image
+        run: docker build -t pika-blast:latest .
+      
+      - name: Test Docker image
+        run: |
+          docker run -d -p 3000:3000 --name pika-blast-test pika-blast:latest
+          sleep 5
+          curl -f http://localhost:3000/health || exit 1
+          docker stop pika-blast-test
+          docker rm pika-blast-test
+

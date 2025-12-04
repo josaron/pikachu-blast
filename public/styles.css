@@ -1,0 +1,133 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.pikachu-container {
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+.pikachu-container:active {
+    transform: scale(0.95);
+}
+
+.pikachu {
+    width: 300px;
+    height: auto;
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+    transition: filter 0.3s ease;
+    z-index: 1;
+    position: relative;
+}
+
+.pikachu:hover {
+    filter: drop-shadow(0 10px 30px rgba(255, 255, 0, 0.5));
+}
+
+.lightning-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.score-display {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    min-width: 300px;
+}
+
+.score-display h2 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 24px;
+}
+
+.scores {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.score-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.score-item:last-child {
+    border-bottom: none;
+}
+
+.intensity {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.intensity.low {
+    color: #4CAF50;
+}
+
+.intensity.medium {
+    color: #FF9800;
+}
+
+.intensity.high {
+    color: #FF5722;
+}
+
+.intensity.extreme {
+    color: #E91E63;
+}
+
+.score-item span:last-child {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px) rotate(-2deg); }
+    75% { transform: translateX(5px) rotate(2deg); }
+}
+
+.pikachu-container.shake {
+    animation: shake 0.3s ease;
+}
+

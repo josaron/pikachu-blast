@@ -1,0 +1,29 @@
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Simple Pikachu placeholder -->
+  <circle cx="150" cy="120" r="80" fill="#FFD700" stroke="#FFA500" stroke-width="3"/>
+  <!-- Eyes -->
+  <circle cx="130" cy="100" r="8" fill="#000"/>
+  <circle cx="170" cy="100" r="8" fill="#000"/>
+  <!-- Nose -->
+  <polygon points="150,115 145,125 155,125" fill="#000"/>
+  <!-- Mouth -->
+  <path d="M 130 140 Q 150 150 170 140" stroke="#000" stroke-width="3" fill="none"/>
+  <!-- Cheeks -->
+  <circle cx="100" cy="120" r="20" fill="#FF6B6B" opacity="0.7"/>
+  <circle cx="200" cy="120" r="20" fill="#FF6B6B" opacity="0.7"/>
+  <!-- Ears -->
+  <polygon points="120,50 110,20 130,30" fill="#FFD700" stroke="#FFA500" stroke-width="2"/>
+  <polygon points="180,50 190,20 170,30" fill="#FFD700" stroke="#FFA500" stroke-width="2"/>
+  <!-- Body -->
+  <ellipse cx="150" cy="200" rx="60" ry="80" fill="#FFD700" stroke="#FFA500" stroke-width="3"/>
+  <!-- Arms -->
+  <ellipse cx="100" cy="180" rx="15" ry="40" fill="#FFD700" stroke="#FFA500" stroke-width="2"/>
+  <ellipse cx="200" cy="180" rx="15" ry="40" fill="#FFD700" stroke="#FFA500" stroke-width="2"/>
+  <!-- Legs -->
+  <ellipse cx="130" cy="250" rx="20" ry="30" fill="#FFD700" stroke="#FFA500" stroke-width="2"/>
+  <ellipse cx="170" cy="250" rx="20" ry="30" fill="#FFD700" stroke="#FFA500" stroke-width="2"/>
+  <!-- Tail -->
+  <path d="M 80 200 Q 40 180 30 160 Q 20 140 40 120" stroke="#FFD700" stroke-width="15" fill="none" stroke-linecap="round"/>
+  <path d="M 30 160 Q 20 150 25 145" stroke="#000" stroke-width="3" fill="none"/>
+</svg>
+
